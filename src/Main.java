@@ -24,11 +24,11 @@ public class Main {
 
     System.out.println(getAvailableSlot("bellandur", LocalDate.of(2021, 5, 28)));
 
-    bookSlot("bellandur", "1", 1);
+    bookSlot("bellandur", "1", 1, LocalDate.of(2021, 5, 28));
 
     System.out.println(viewUserBooking("1", LocalDate.of(2021, 5, 28)));
 
-    cancelSlot("bellandur", "1", 1);
+    cancelSlot("bellandur", "1", 1, LocalDate.of(2021, 5, 28));
 
     System.out.println(viewUserBooking("1", LocalDate.of(2021, 5, 28)));
   }
@@ -73,7 +73,7 @@ public class Main {
     return "No slots available";
   }
 
-  public static void bookSlot(String centerName, String userId, int slotId) {
+  public static void bookSlot(String centerName, String userId, int slotId, LocalDate date) {
     Center center = centers.get(centerName);
     User user = users.get(userId);
     if (center != null && user != null) {
@@ -82,7 +82,7 @@ public class Main {
           if (slot.getAvailableSeats() > 0) {
             slot.setAvailableSeats(slot.getAvailableSeats() - 1);
             slot.getBookedUsers().add(user);
-            bookings.add(new Booking(userId, slotId, LocalDate.now()));
+            bookings.add(new Booking(userId, slotId, date));
           } else if (slot.getWaitlist().size() < slot.getWaitlistCapacity()) {
             slot.getWaitlist().add(user);
             System.out.println("User " + user.getName() + " added to waitlist for slot " + slot.getId());
@@ -111,7 +111,7 @@ public class Main {
     return result.length() > 0 ? result.toString() : "No booking for the date";
   }
 
-  public static void cancelSlot(String centerName, String userId, int slotId) {
+  public static void cancelSlot(String centerName, String userId, int slotId, LocalDate date) {
     Center center = centers.get(centerName);
     User user = users.get(userId);
     if (center != null && user != null) {
@@ -119,7 +119,7 @@ public class Main {
         if (slot.getId() == slotId) {
           Booking bookingToRemove = null;
           for (Booking booking : bookings) {
-            if (booking.getUserId().equals(userId) && booking.getSlotId() == slotId) {
+            if (booking.getUserId().equals(userId) && booking.getSlotId() == slotId && booking.getDate().equals(date)) {
               bookingToRemove = booking;
               break;
             }
@@ -134,7 +134,7 @@ public class Main {
               User promotedUser = slot.getWaitlist().remove(0);
               slot.setAvailableSeats(slot.getAvailableSeats() - 1);
               slot.getBookedUsers().add(promotedUser);
-              bookings.add(new Booking(promotedUser.getId(), slot.getId(), LocalDate.now()));
+              bookings.add(new Booking(promotedUser.getId(), slot.getId(), date));
               System.out.println("User " + promotedUser.getName() + " promoted from waitlist to booked for slot " + slot.getId());
             }
           }
