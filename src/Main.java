@@ -41,7 +41,10 @@ public class Main {
   public static void addWorkOutType(String centerName, String workoutType) {
     Center center = centers.get(centerName);
     if (center != null) {
-      // No specific action needed for workout type in this simplified version
+      if (center.getWorkoutTypes() == null) {
+        center.setWorkoutTypes(new ArrayList<>());
+      }
+      center.getWorkoutTypes().add(workoutType);
     }
   }
 

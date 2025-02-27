@@ -6,6 +6,7 @@ public class Center {
   private List<String> daysClosed;
   private int numberOfSlots;
   private List<Slot> slots;
+  private List<String> workoutTypes; // Add this line
 
   public Center(String name, String city, List<String> daysClosed, int numberOfSlots, List<Slot> slots) {
     this.name = name;
@@ -54,5 +55,13 @@ public class Center {
 
   public void setSlots(List<Slot> slots) {
     this.slots = slots;
+  }
+
+  public List<String> getWorkoutTypes() {
+    return workoutTypes;
+  }
+
+  public void setWorkoutTypes(List<String> workoutTypes) {
+    this.workoutTypes = workoutTypes;
   }
 }
